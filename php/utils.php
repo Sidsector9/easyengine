@@ -213,6 +213,29 @@ function format_items( $format, $items, $fields ) {
 }
 
 /**
+ * Write data as CSV to a given file.
+ *
+ * @access public
+ *
+ * @param resource $fd         File descriptor
+ * @param array    $rows       Array of rows to output
+ * @param array    $headers    List of CSV columns (optional)
+ */
+function write_csv( $fd, $rows, $headers = array() ) {
+    if ( ! empty( $headers ) ) {
+        fputcsv( $fd, $headers );
+    }
+
+    foreach ( $rows as $row ) {
+        if ( ! empty( $headers ) ) {
+            $row = pick_fields( $row, $headers );
+        }
+
+        fputcsv( $fd, array_values( $row ) );
+    }
+}
+
+/**
  * Pick fields from an associative array or object.
  *
  * @param array|object Associative array or object to pick fields from
